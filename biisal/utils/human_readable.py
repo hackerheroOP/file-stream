@@ -1,16 +1,27 @@
-# (c) @biisal
-# (c) adarsh-goel
+# (c) 2023 @biisal, adarsh-goel
 
+def humanbytes(size: float) -> str:
+    """
+    Convert a file size in bytes to a human-readable format.
 
-def humanbytes(size):
-    # https://stackoverflow.com/a/49361727/4723940
-    # 2**10 = 1024
+    Args:
+        size (float): The file size in bytes.
+
+    Returns:
+        str: The file size in a human-readable format.
+    """
+    if not isinstance(size, (int, float)):
+        raise ValueError("Size must be a number")
+
     if not size:
         return ""
-    power = 2**10
+
+    power = 1024
     n = 0
-    Dic_powerN = {0: ' ', 1: 'Ki', 2: 'Mi', 3: 'Gi', 4: 'Ti'}
+    power_names = {0: ' ', 1: 'Ki', 2: 'Mi', 3: 'Gi', 4: 'Ti'}
+
     while size > power:
         size /= power
         n += 1
-    return str(round(size, 2)) + " " + Dic_powerN[n] + 'B'
+
+    return f"{size:.2f} {power_names[n]}B"
