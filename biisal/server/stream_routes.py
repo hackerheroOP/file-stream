@@ -38,7 +38,7 @@ async def root_route_handler(request):
         ),
         "version": __version__,
     }
-    return aiohttp_jinja2.render_template("index.html", request, context)
+    return jinja2.render_template("index.html", request, context)
 
 
 @routes.get(r"/watch/{path:\S+}", allow_head=True)
