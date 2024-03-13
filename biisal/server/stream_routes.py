@@ -28,7 +28,7 @@ async def root_route_handler(_):
     html_content =  """
     <html>
         <body>
-            <h1>Welcome to my web application!</h1>
+            <h1>Link Wiz Bot Status!</h1>
             <p>Server status: <strong>{server_status}</strong></p>
             <p>Uptime: <strong>{uptime}</strong></p>
             <p>Telegram bot: <strong>{telegram_bot}</strong></p>
