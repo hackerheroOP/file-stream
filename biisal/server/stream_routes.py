@@ -25,11 +25,54 @@ routes = web.RouteTableDef()
 
 @routes.get("/", allow_head=True)
 async def root_route_handler(_):
-    html_content =  """
+    google_tag_code = """
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0K633G9XYB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-0K633G9XYB');
+    </script>
+    """
+    html_content = """
     <html>
-    
+        <head>
+            {google_tag_code}
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    margin: 0;
+                    padding: 0;
+                    background-color: #f0f0f0;
+                }}
+                h1 {{
+                    font-size: 2em;
+                    font-weight: bold;
+                    color: #333;
+                    padding: 20px;
+                    background-color: #ddd;
+                    border-bottom: 1px solid #ccc;
+                }}
+                p {{
+                    font-size: 1.1em;
+                    color: #333;
+                    padding: 20px;
+                }}
+                ul {{
+                    list-style: none;
+                    padding: 0;
+                    margin: 0;
+                }}
+                li {{
+                    padding: 5px 0;
+                    border-bottom: 1px solid #ccc;
+                }}
+            </style>
+        </head>
         <body>
-            <h1>Link Wiz Bot Status!</h1>
+            <h1>Link Wiz Status</h1>
             <p>Server status: <strong>{server_status}</strong></p>
             <p>Uptime: <strong>{uptime}</strong></p>
             <p>Telegram bot: <strong>{telegram_bot}</strong></p>
@@ -42,6 +85,7 @@ async def root_route_handler(_):
         </body>
     </html>
     """.format(
+        google_tag_code=google_tag_code,
         server_status="running",
         uptime=get_readable_time(time.time() - StartTime),
         telegram_bot="@" + StreamBot.username,
@@ -55,6 +99,7 @@ async def root_route_handler(_):
         version=__version__,
     )
     return web.Response(body=html_content, content_type="text/html")
+            
     
     
 @routes.get(r"/watch/{path:\S+}", allow_head=True)
