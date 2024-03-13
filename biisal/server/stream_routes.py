@@ -2,6 +2,7 @@
 # Thanks to Eyaadh <https://github.com/eyaadh>
 # Thanks to adarsh-goel
 # (c) @biisal
+import aiohttp_jinja2
 import re
 import time
 import math
@@ -22,6 +23,7 @@ from biisal.vars import Var
 routes = web.RouteTableDef()
 
 @routes.get("/", allow_head=True)
+@aiohttp_jinja2.template("index.html")
 async def root_route_handler(_):
     return web.json_response(
         {
