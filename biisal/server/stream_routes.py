@@ -39,6 +39,10 @@ async def root_route_handler(request):
         "version": __version__,
     }
 
+@app.route("/favicon.ico")
+def favicon():
+    return "", 204
+
 
 @routes.get(r"/watch/{path:\S+}", allow_head=True)
 async def stream_handler(request: web.Request):
