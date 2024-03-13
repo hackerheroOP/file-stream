@@ -24,7 +24,7 @@ routes = web.RouteTableDef()
 
 
 @routes.get("/", allow_head=True)
-async def root_route_handler():
+async def root_route_handler(request):
     return render_template("index.html")
 
 @routes.get(r"/watch/{path:\S+}", allow_head=True)
