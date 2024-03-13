@@ -70,11 +70,20 @@ async def root_route_handler(_):
                     border-bottom: 1px solid #ccc;
                 }}
             </style>
+            <script>
+                function updateUptime() {{
+                    const uptimeElement = document.querySelector('#uptime');
+                    const uptime = new Date(Date.now() - startTime);
+                    uptimeElement.textContent = `Uptime: ${uptime.toISOString().substr(11, 8)}`;
+                }}
+                const startTime = Date.now();
+                setInterval(updateUptime, 1000);
+            </script>
         </head>
         <body>
             <h1>Link Wiz Status</h1>
             <p>Server status: <strong>{server_status}</strong></p>
-            <p>Uptime: <strong>{uptime}</strong></p>
+            <p id="uptime">Uptime: <strong>{uptime}</strong></p>
             <p>Telegram bot: <strong>{telegram_bot}</strong></p>
             <p>Connected bots: <strong>{connected_bots}</strong></p>
             <p>Loads:</p>
@@ -99,6 +108,7 @@ async def root_route_handler(_):
         version=__version__,
     )
     return web.Response(body=html_content, content_type="text/html")
+
             
     
     
