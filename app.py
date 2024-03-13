@@ -5,6 +5,10 @@ app = Flask(__name__)
 def hello_world():
     return 'Bisal_Files'
 
+@app.route("/favicon.ico")
+def favicon():
+    return "", 204
+
 
 if __name__ == "__main__":
     app.run()
