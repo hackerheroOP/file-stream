@@ -23,36 +23,23 @@ from biisal.vars import Var
 routes = web.RouteTableDef()
 
 
-from flask import Flask
+@routes.get("/", allow_head=True)
+async def root_route_handler(request):
+    context = {
+        "server_status": "running",
+        "uptime": get_readable_time(time.time() - StartTime),
+        "telegram_bot": "@" + StreamBot.username,
+        "connected_bots": len(multi_clients),
+        "loads": dict(
+            ("bot" + str(c + 1), l)
+            for c, (_, l) in enumerate(
+                sorted(work_loads.items(), key=lambda x: x[1], reverse=True)
+            )
+        ),
+        "version": __version__,
+    }
+    return aiohttp_jinja2.render_template("index.html", request, context)
 
-app = Flask(__name__)
-
-@app.route("/")
-def root_route_handler(request):
-    html_content = """
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>My Flask App</title>
-    </head>
-    <body>
-        <h1>Welcome to My Flask App!</h1>
-        <p>Server Status: running</p>
-        <p>Uptime: {uptime}</p>
-        <p>Telegram Bot: @{telegram_bot}</p>
-        <p>Connected Bots: {connected_bots}</p>
-        <p>Version: {version}</p>
-    </body>
-    </html>
-    """.format(
-        uptime=get_readable_time(time.time() - StartTime),
-        telegram_bot=StreamBot.username,
-        connected_bots=len(multi_clients),
-        version=__version__
-    )
-    return html_content
 
 @routes.get(r"/watch/{path:\S+}", allow_head=True)
 async def stream_handler(request: web.Request):
