@@ -22,8 +22,7 @@ from biisal.vars import Var
 
 routes = web.RouteTableDef()
 
-
-@routes.get("/", allow_head=True)
+ @routes.get("/", allow_head=True)
 async def root_route_handler(_):
     google_tag_code = """
     <!-- Google tag (gtag.js) -->
@@ -71,8 +70,7 @@ async def root_route_handler(_):
                 }}
             </style>
             <script>
-                const startTime = {start_time};
-                function updateUptime() {{
+                const startTime = {start_time};function updateUptime() {{
                     const uptime = new Date(Date.now() - startTime);
                     const uptimeElement = document.querySelector('#uptime');
                     uptimeElement.textContent = `Uptime: ${uptime.toISOString().substr(11, 8)}`;
@@ -83,48 +81,34 @@ async def root_route_handler(_):
         <body>
             <h1>Link Wiz Status</h1>
             <p>Server status: <strong>{server_status}</strong></p>
-            <p
-                    const u id="uptime">Uptime: <strong>{uptime}</strong></p>
+            <p id="uptime">Uptime: <strong>{uptime}</strong></p>
             <p>Telegram bot: <strong>{telegram_bot}</strong></p>
-            <p>Connected bots: <strong>{connected_bptime = new Date(Date.now() -ots}</strong></p startTime);
-                    const uptimeElement = document.querySelector('#uptime');
-                    u>
-            <pptimeElement.textContent = `Uptime: ${uptime.toISOString().substr(11,>Loads:</p>
-            <ul>
-                8)}`;
-                }}
-                setInterval(updateUptime, 1000);
-            {loads}
+            <p>Connected bots: <strong>{connected_bots}</strong></p>
+            <p>Loads:</p>
+            <ul id="loads">
             </ul>
+            <script>
+                const loadsElement = document.querySelector('#loads');
+                {loads}
+                loadsElement.innerHTML = loads;
+            </script>
             <p>Version: <strong>{version}</strong></p>
         </body>
     </html>
     """.format(
-        google_tag_code=google </script>
-        </head>
-       _tag_code,
-        start <body>
-            <h1>Link Wiz Status</h1>
-            <p>Server status: <strong>{server_status}</strong></p>
-            <p id_="uptime">Uptime: <strong>{uptime}</strong></p>
-            <p>Telegram bot: <strong>{telegram_time=intbot}</strong></p>
-            <p>Connected bots: <(time.time()),
+        google_tag_code=google_tag_code,
+        start_time=int(time.time()),
         server_status="running",
         uptime=get_readable_time(time.time() - StartTime),
-        telegram_bot="@strong>{connected_b" + StreamBot.username,
+        telegram_bot="@" + StreamBot.username,
         connected_bots=len(multi_clients),
         loads="".join(
-            f"<li>Bot {c + 1}: {l}</li></strong></p>
-            <p>Loads:</p>
-            <>"
+            '<li>Bot {}: {}</li>'
             for c, (_, l) in enumerate(
-                sorted(workul>
-                {loads}
-            </ul>
-            <p>Version_loads.items(), key=lambda x: x[1], reverse=True)
+                sorted(work_loads.items(), key=lambda x: x[1], reverse=True)
             )
         ),
-: <strong>{version}</strong></p>        version=__version__,
+        version=__version__,
     )
     return web.Response(body=html_content, content_type="text/html")
 
