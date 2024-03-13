@@ -1,46 +1,31 @@
-# (c) adarsh-goel (c) @biisal
 import os
-from os import getenv, environ
-from dotenv import load_dotenv
 
+class Var():
+    """Configuration variables for the bot."""
 
-
-load_dotenv()
-bot_name = "ғɪʟᴇ 𝟸 ʟɪɴᴋ ʙᴏᴛ"
-bisal_channel = "https://telegram.me/movies_unloaded_network"
-bisal_grp = "https://t.me/movies_request_02"
-
-class Var(object):
-    MULTI_CLIENT = False
-    API_ID = int(getenv('API_ID', ''))
-    API_HASH = str(getenv('API_HASH', ''))
-    BOT_TOKEN = str(getenv('BOT_TOKEN' , ''))
-    name = str(getenv('name', 'FileToLinkWalaBot'))
-    SLEEP_THRESHOLD = int(getenv('SLEEP_THRESHOLD', '60'))
-    WORKERS = int(getenv('WORKERS', '4'))
-    BIN_CHANNEL = int(getenv('BIN_CHANNEL', ''))
-    NEW_USER_LOG = int(getenv('NEW_USER_LOG', ''))
-    PORT = int(getenv('PORT', '8080'))
-    BIND_ADRESS = str(getenv('WEB_SERVER_BIND_ADDRESS', '0.0.0.0'))
-    PING_INTERVAL = int(environ.get("PING_INTERVAL", "1200"))  # 20 minutes
-    OWNER_ID = [int(x) for x in os.environ.get("OWNER_ID", "1251111009").split()]
-    NO_PORT = bool(getenv('NO_PORT', False))
-    APP_NAME = None
-    OWNER_USERNAME = str(getenv('OWNER_USERNAME', 'biisal'))
-    if 'DYNO' in environ:
-        ON_HEROKU = True
-        APP_NAME = str(getenv('APP_NAME')) #dont need to fill anything here
-    
-    else:
-        ON_HEROKU = False
-    FQDN = str(getenv('FQDN', 'BIND_ADRESS:PORT')) if not ON_HEROKU or getenv('FQDN', '') else APP_NAME+'.herokuapp.com'
-    HAS_SSL=bool(getenv('HAS_SSL',True))
-    if HAS_SSL:
-        URL = "https://{}/".format(FQDN)
-    else:
-        URL = "http://{}/".format(FQDN)
-    DATABASE_URL = str(getenv('DATABASE_URL', ''))
-    UPDATES_CHANNEL = str(getenv('UPDATES_CHANNEL', 'movies_unloaded2')) 
-    BANNED_CHANNELS = list(set(int(x) for x in str(getenv("BANNED_CHANNELS", "")).split()))   
-    BAN_CHNL = list(set(int(x) for x in str(getenv("BAN_CHNL", "")).split()))   
-    BAN_ALERT = str(getenv('BAN_ALERT' , '<b>ʏᴏᴜʀ ᴀʀᴇ ʙᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴛʜɪs ʙᴏᴛ.Pʟᴇᴀsᴇ ᴄᴏɴᴛᴀᴄᴛ @pro_morningstar_bot ᴛᴏ ʀᴇsᴏʟᴠᴇ ᴛʜᴇ ɪssᴜᴇ!!</b>'))
+    def __init__(self):
+        self.MULTI_CLIENT = False
+        self.API_ID = self.get_env('API_ID', 0)
+        self.API_HASH = self.get_env('API_HASH', '')
+        self.BOT_TOKEN = self.get_env('BOT_TOKEN', '')
+        self.name = self.get_env('name', 'FileToLinkWalaBot')
+        self.SLEEP_THRESHOLD = self.get_env('SLEEP_THRESHOLD', 60)
+        self.WORKERS = self.get_env('WORKERS', 4)
+        self.BIN_CHANNEL = self.get_env('BIN_CHANNEL', 0)
+        self.NEW_USER_LOG = self.get_env('NEW_USER_LOG', 0)
+        self.PORT = self.get_env('PORT', 8080)
+        self.BIND_ADRESS = self.get_env('WEB_SERVER_BIND_ADDRESS', '0.0.0.0')
+        self.PING_INTERVAL = self.get_env('PING_INTERVAL', 1200)  # 20 minutes
+        self.OWNER_ID = self.get_list_env('OWNER_ID', [1251111009])
+        self.NO_PORT = self.get_env('NO_PORT', False)
+        self.APP_NAME = None
+        self.OWNER_USERNAME = self.get_env('OWNER_USERNAME', 'biisal')
+        self.ON_HEROKU = 'DYNO' in os.environ
+        self.FQDN = self.get_env('FQDN', self.BIND_ADRESS + ':' + str(self.PORT)) if not self.ON_HEROKU else self.APP_NAME + '.herokuapp.com'
+        self.HAS_SSL = self.get_env('HAS_SSL', True)
+        self.URL = 'https://{}/'.format(self.FQDN) if self.HAS_SSL else 'http://{}/'.format(self.FQDN)
+        self.DATABASE_URL = self.get_env('DATABASE_URL', '')
+        self.UPDATES_CHANNEL = self.get_env('UPDATES_CHANNEL', 'movies_unloaded2')
+        self.BANNED_CHANNELS = list(set(self.get_list_env('BANNED_CHANNELS', [])))
+        self.BAN_CHNL = list(set(self.get_list_env('BAN_CHNL', [])))
+        self.BAN_ALERT = self.get_env('BAN_ALERT', '<b>ʏᴏᴜʀ ᴀʀᴇ ʙᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴛʜɪs ʙᴏᴛ.Pʟᴇ
