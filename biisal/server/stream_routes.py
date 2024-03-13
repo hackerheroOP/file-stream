@@ -27,6 +27,18 @@ routes = web.RouteTableDef()
 async def root_route_handler(_):
     html_content =  """
     <html>
+    <head>
+    <title> Link Wiz Status </title>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-0K633G9XYB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-0K633G9XYB');
+</script>
+</head>
         <body>
             <h1>Link Wiz Bot Status!</h1>
             <p>Server status: <strong>{server_status}</strong></p>
