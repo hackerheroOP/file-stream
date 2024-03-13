@@ -2,7 +2,7 @@
 # Thanks to Eyaadh <https://github.com/eyaadh>
 # Thanks to adarsh-goel
 # (c) @biisal
-import aiohttp_jinja2
+import jinja2
 import re
 import time
 import math
