@@ -23,7 +23,7 @@ from biisal.vars import Var
 routes = web.RouteTableDef()
 
 @routes.get("/", allow_head=True)
-async def index:()
+async def root_route_handler(_):
 return render_template('index.html')
 
 
