@@ -71,41 +71,60 @@ async def root_route_handler(_):
                 }}
             </style>
             <script>
+                const startTime = {start_time};
                 function updateUptime() {{
-                    const uptimeElement = document.querySelector('#uptime');
                     const uptime = new Date(Date.now() - startTime);
+                    const uptimeElement = document.querySelector('#uptime');
                     uptimeElement.textContent = `Uptime: ${uptime.toISOString().substr(11, 8)}`;
                 }}
-                const startTime = Date.now();
                 setInterval(updateUptime, 1000);
-            </script>
+           ime() {{ </script>
         </head>
         <body>
             <h1>Link Wiz Status</h1>
             <p>Server status: <strong>{server_status}</strong></p>
-            <p id="uptime">Uptime: <strong>{uptime}</strong></p>
+            <p
+                    const u id="uptime">Uptime: <strong>{uptime}</strong></p>
             <p>Telegram bot: <strong>{telegram_bot}</strong></p>
-            <p>Connected bots: <strong>{connected_bots}</strong></p>
-            <p>Loads:</p>
+            <p>Connected bots: <strong>{connected_bptime = new Date(Date.now() -ots}</strong></p startTime);
+                    const uptimeElement = document.querySelector('#uptime');
+                    u>
+            <pptimeElement.textContent = `Uptime: ${uptime.toISOString().substr(11,>Loads:</p>
             <ul>
-                {loads}
+                8)}`;
+                }}
+                setInterval(updateUptime, 1000);
+            {loads}
             </ul>
             <p>Version: <strong>{version}</strong></p>
         </body>
     </html>
     """.format(
-        google_tag_code=google_tag_code,
+        google_tag_code=google </script>
+        </head>
+       _tag_code,
+        start <body>
+            <h1>Link Wiz Status</h1>
+            <p>Server status: <strong>{server_status}</strong></p>
+            <p id_="uptime">Uptime: <strong>{uptime}</strong></p>
+            <p>Telegram bot: <strong>{telegram_time=intbot}</strong></p>
+            <p>Connected bots: <(time.time()),
         server_status="running",
         uptime=get_readable_time(time.time() - StartTime),
-        telegram_bot="@" + StreamBot.username,
+        telegram_bot="@strong>{connected_b" + StreamBot.username,
         connected_bots=len(multi_clients),
         loads="".join(
-            f"<li>Bot {c + 1}: {l}</li>"
+            f"<li>Bot {c + 1}: {l}</liots}</strong></p>
+            <p>Loads:</p>
+            <>"
             for c, (_, l) in enumerate(
-                sorted(work_loads.items(), key=lambda x: x[1], reverse=True)
+                sorted(workul>
+                {loads}
+            </ul>
+            <p>Version_loads.items(), key=lambda x: x[1], reverse=True)
             )
         ),
-        version=__version__,
+: <strong>{version}</strong></p>        version=__version__,
     )
     return web.Response(body=html_content, content_type="text/html")
 
