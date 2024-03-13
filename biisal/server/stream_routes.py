@@ -22,7 +22,8 @@ from biisal.vars import Var
 
 routes = web.RouteTableDef()
 
- @routes.get("/", allow_head=True)
+             
+@routes.get("/", allow_head=True)
 async def root_route_handler(_):
     google_tag_code = """
     <!-- Google tag (gtag.js) -->
@@ -69,41 +70,28 @@ async def root_route_handler(_):
                     border-bottom: 1px solid #ccc;
                 }}
             </style>
-            <script>
-                const startTime = {start_time};function updateUptime() {{
-                    const uptime = new Date(Date.now() - startTime);
-                    const uptimeElement = document.querySelector('#uptime');
-                    uptimeElement.textContent = `Uptime: ${uptime.toISOString().substr(11, 8)}`;
-                }}
-                setInterval(updateUptime, 1000);
-           ime() {{ </script>
         </head>
         <body>
             <h1>Link Wiz Status</h1>
             <p>Server status: <strong>{server_status}</strong></p>
-            <p id="uptime">Uptime: <strong>{uptime}</strong></p>
+            <p>Uptime: <strong>{uptime}</strong></p>
             <p>Telegram bot: <strong>{telegram_bot}</strong></p>
             <p>Connected bots: <strong>{connected_bots}</strong></p>
             <p>Loads:</p>
-            <ul id="loads">
-            </ul>
-            <script>
-                const loadsElement = document.querySelector('#loads');
+            <ul>
                 {loads}
-                loadsElement.innerHTML = loads;
-            </script>
+            </ul>
             <p>Version: <strong>{version}</strong></p>
         </body>
     </html>
     """.format(
         google_tag_code=google_tag_code,
-        start_time=int(time.time()),
         server_status="running",
         uptime=get_readable_time(time.time() - StartTime),
         telegram_bot="@" + StreamBot.username,
         connected_bots=len(multi_clients),
         loads="".join(
-            '<li>Bot {}: {}</li>'
+            f"<li>Bot {c + 1}: {l}</li>"
             for c, (_, l) in enumerate(
                 sorted(work_loads.items(), key=lambda x: x[1], reverse=True)
             )
