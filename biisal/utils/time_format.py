@@ -1,26 +1,21 @@
-# (c) @biisal
-# (c) adarsh-goel
-# Bot Uptime
-
 def get_readable_time(seconds: int) -> str:
-    count = 0
-    readable_time = ""
-    time_list = []
-    time_suffix_list = ["s", "m", "h", " days"]
-    while count < 4:
-        count += 1
-        if count < 3:
-            remainder, result = divmod(seconds, 60)
-        else:
-            remainder, result = divmod(seconds, 24)
-        if seconds == 0 and remainder == 0:
-            break
-        time_list.append(int(result))
-        seconds = int(remainder)
-    for x in range(len(time_list)):
-        time_list[x] = str(time_list[x]) + time_suffix_list[x]
+    """
+    Convert a number of seconds into a human-readable time format.
+    :param seconds: The number of seconds to convert.
+    :return: A string in the format of "X days, Y hours, Z minutes, W seconds".
+    """
+    if not isinstance(seconds, int) or seconds < 0:
+        raise ValueError("Input must be a non-negative integer.")
+
+    time_list = [
+        int(seconds / 24 / 60 / 60),
+        int(seconds / 60 / 60 % 24),
+        int(seconds / 60 % 60),
+        int(seconds % 60)
+    ]
+    time_suffix_list = [" days", " hours", " minutes", " seconds"]
+    time_list = [f"{t}{suf}" for t, suf in zip(time_list, time_suffix_list) if t > 0]
     if len(time_list) == 4:
-        readable_time += time_list.pop() + ", "
-    time_list.reverse()
-    readable_time += ": ".join(time_list)
-    return readable_time 
+        time_list[-1], time_list[-2] = time_list[-2], time_list[-1]
+        time_list[-1] = ", " + time_list[-1]
+    return ": ".join(time_list)
