@@ -25,27 +25,36 @@ routes = web.RouteTableDef()
 
 @routes.get("/", allow_head=True)
 async def root_route_handler(_):
-    html_content = "<html>    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>My Flask App</title>
-    </head>
-    <body>
-        <h1>Welcome to My Flask App!</h1>
-        <p>Server Status: running</p>
-        <p>Uptime: {uptime}</p>
-        <p>Telegram Bot: @{telegram_bot}</p>
-        <p>Connected Bots: {connected_bots}</p>
-        <p>Version: {version}</p>
-    </body>
+    html_content =  """
+    <html>
+        <body>
+            <h1>Welcome to my web application!</h1>
+            <p>Server status: <strong>{server_status}</strong></p>
+            <p>Uptime: <strong>{uptime}</strong></p>
+            <p>Telegram bot: <strong>{telegram_bot}</strong></p>
+            <p>Connected bots: <strong>{connected_bots}</strong></p>
+            <p>Loads:</p>
+            <ul>
+                {loads}
+            </ul>
+            <p>Version: <strong>{version}</strong></p>
+        </body>
     </html>
     """.format(
+        server_status="running",
         uptime=get_readable_time(time.time() - StartTime),
-        telegram_bot=StreamBot.username,
+        telegram_bot="@" + StreamBot.username,
         connected_bots=len(multi_clients),
-        version=__version__
-    )</html>"
+        loads="".join(
+            f"<li>Bot {c + 1}: {l}</li>"
+            for c, (_, l) in enumerate(
+                sorted(work_loads.items(), key=lambda x: x[1], reverse=True)
+            )
+        ),
+        version=__version__,
+    )
     return web.Response(body=html_content, content_type="text/html")
+    
     
 @routes.get(r"/watch/{path:\S+}", allow_head=True)
 async def stream_handler(request: web.Request):
