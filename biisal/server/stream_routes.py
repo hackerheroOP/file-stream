@@ -114,7 +114,7 @@ async def root_route_handler(_):
         telegram_bot="@strong>{connected_b" + StreamBot.username,
         connected_bots=len(multi_clients),
         loads="".join(
-            f"<li>Bot {c + 1}: {l}</liots}</strong></p>
+            f"<li>Bot {c + 1}: {l}</li></strong></p>
             <p>Loads:</p>
             <>"
             for c, (_, l) in enumerate(
