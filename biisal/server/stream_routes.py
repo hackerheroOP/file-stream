@@ -24,22 +24,8 @@ routes = web.RouteTableDef()
 
 
 @routes.get("/", allow_head=True)
-async def root_route_handler(request):
-    context = {
-        "server_status": "running",
-        "uptime": get_readable_time(time.time() - StartTime),
-        "telegram_bot": "@" + StreamBot.username,
-        "connected_bots": len(multi_clients),
-        "loads": dict(
-            ("bot" + str(c + 1), l)
-            for c, (_, l) in enumerate(
-                sorted(work_loads.items(), key=lambda x: x[1], reverse=True)
-            )
-        ),
-        "version": __version__,
-    }
-    return jinja2.render_template("index.html", request, context)
-
+async def root_route_handler():
+    return render_template("index.html")
 
 @routes.get(r"/watch/{path:\S+}", allow_head=True)
 async def stream_handler(request: web.Request):
