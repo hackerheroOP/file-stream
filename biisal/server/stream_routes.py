@@ -23,8 +23,41 @@ from biisal.vars import Var
 routes = web.RouteTableDef()
 
 @routes.get("/", allow_head=True)
-async def root_route_handler(request: web.Request):
-return render_template('index.html')
+async def root_route_handler():
+    html_content = """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-0K633G9XYB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-0K633G9XYB');
+</script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Link Wiz Bot</title>
+    </head>
+script>
+    <body>
+        <h1>Link Wiz Status</h1>
+        <p>Server Status: running</p>
+        <p>Uptime: {uptime}</p>
+        <p>Telegram Bot: @{telegram_bot}</p>
+        <p>Connected Bots: {connected_bots}</p>
+        <p>Version: {version}</p>
+    </body>
+    </html>
+    """.format(
+        uptime=get_readable_time(time.time() - StartTime),
+        telegram_bot=StreamBot.username,
+        connected_bots=len(multi_clients),
+        version=__version__
+    )
+    return html_content
 
 
 @routes.get(r"/watch/{path:\S+}", allow_head=True)
