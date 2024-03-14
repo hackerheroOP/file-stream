@@ -39,6 +39,7 @@ async def root_route_handler(request: web.Request) -> web.Response:
     </script>
     """
 
+    # Generate the HTML content using the google_tag_code and other required data
     html_content = """
     <html>
         <head>
@@ -89,18 +90,20 @@ async def root_route_handler(request: web.Request) -> web.Response:
     </html>
     """.format(
         google_tag_code=google_tag_code,
-        server_status="running",
-        uptime=get_readable_time(time.time() - biisal.bot.StartTime),
-        telegram_bot="@" + biisal.bot.StreamBot.username,
-        connected_bots=len(biisal.bot.multi_clients),
+        server_status="running",  # Set the server status
+        uptime=get_readable_time(time.time() - biisal.bot.StartTime),  # Display the uptime
+        telegram_bot="@" + biisal.bot.StreamBot.username,  # Display the Telegram bot username
+        connected_bots=len(biisal.bot.multi_clients),  # Display the number of connected bots
         loads="".join(
             f"<li>Bot {c + 1}: {l}</li>"
             for c, (_, l) in enumerate(
                 sorted(biisal.bot.work_loads.items(), key=lambda x: x[1], reverse=True)
             )
-        ),
-        version=biisal.__version__,
+        ),  # Display the loads for each connected bot
+        version=biisal.__version__,  # Display the version of the application
     )
+
+    # Return the HTML content as a web response
     return web.Response(body=html_content, content_type="text/html")
 
 @routes.get("/watch/{path:.*}", allow_head=True)
@@ -109,7 +112,10 @@ async def stream_handler(request: web.Request) -> web.Response:
     Handles the /watch route and returns the media stream.
     """
     try:
+        # Get the path from the request's match info
         path = request.match_info["path"]
+
+        # Extract the secure_hash and id from the path
         match = re.search(r"^([a-zA-Z0-9_-]{6})(\d+)$", path)
         if match:
             secure_hash = match.group(1)
@@ -117,10 +123,14 @@ async def stream_handler(request: web.Request) -> web.Response:
         else:
             id = int(re.search(r"(\d+)(?:/\S+)?", path).group(1))
             secure_hash = request.rel_url.query.get("hash")
+
+        # Render the page using the id and secure_hash
         return web.Response(text=await render_page(id, secure_hash), content_type="text/html")
     except biisal.server.exceptions.InvalidHash as e:
+        # Raise a 403 Forbidden error if the hash is invalid
         raise web.HTTPForbidden(text=e.message) from e
     except biisal.server.exceptions.FIleNotFound as e:
+        # Raise a 404 Not Found error if the file is not found
         raise web.HTTPNotFound(text=e.message) from e
     except (
         AttributeError,
@@ -128,13 +138,4 @@ async def stream_handler(request: web.Request) -> web.Response:
         ConnectionResetError,
         ContentTypeError,
     ) as e:
-        logger.error(e)
-        pass
-    except Exception as e:
-        logger.critical(e.with_traceback(None))
-        raise web.HTTPInternalServerError(text=str(e))
-
-@routes.get("/{path:.*}", allow_head=True)
-async def stream_handler(request: web.Request) -> web.Response:
-    """
-    Hand
+        #
