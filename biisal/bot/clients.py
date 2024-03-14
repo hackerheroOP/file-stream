@@ -13,10 +13,14 @@ async def initialize_clients() -> None:
     This function initializes and starts Pyrogram clients using the tokens provided in the environment variables.
     If no additional clients are found, it uses the default client.
     """
-    multi_clients[0] = StreamBot  # Assign the first client as StreamBot
-    work_loads[0] = 0  # Initialize workload for the first client as 0
+    # Assign the first client as StreamBot
+    multi_clients[0] = StreamBot
+    
+    # Initialize workload for the first client as 0
+    work_loads[0] = 0
 
-    all_tokens = TokenParser().parse_from_env()  # Parse tokens from environment variables
+    # Parse tokens from environment variables
+    all_tokens = TokenParser().parse_from_env()
     if not all_tokens:
         print("No additional clients found, using default client")
         return
@@ -28,9 +32,13 @@ async def initialize_clients() -> None:
         """
         try:
             print(f"Starting - Client {client_id}")
+
+            # If the client_id is the same as the length of all_tokens, it means this is the last client,
+            # and it might take some time to start, so notify the user
             if client_id == len(all_tokens):
                 print("This will take some time, please wait...")
                 await asyncio.sleep(2)
+
             async with Client(
                 name=str(client_id),
                 api_id=Var.API_ID,
@@ -41,15 +49,23 @@ async def initialize_clients() -> None:
                 in_memory=True,
             ) as client:
                 await client.start()  # Start the client
-                work_loads[client_id] = 0  # Initialize workload for the client as 0
+
+                # Initialize workload for the client as 0
+                work_loads[client_id] = 0
+
                 return client_id, client  # Return the client_id and client instance
         except Exception:
             logging.error(f"Failed starting Client - {client_id}", exc_info=True)
 
-    clients = await asyncio.gather(*[start_client(i, token) for i, token in all_tokens.items()])  # Start all clients asynchronously
-    multi_clients.update(dict(clients))  # Update the multi_clients dictionary with the new client instances
+    # Start all clients asynchronously
+    clients = await asyncio.gather(*[start_client(i, token) for i, token in all_tokens.items()])
+
+    # Update the multi_clients dictionary with the new client instances
+    multi_clients.update(dict(clients))
+
+    # If there is more than one client, enable Multi-Client Mode
     if len(multi_clients) != 1:
-        Var.MULTI_CLIENT = True  # Set the MULTI_CLIENT variable to True if there is more than one client
+        Var.MULTI_CLIENT = True  # Set the MULTI_CLIENT variable to True
         print("Multi-Client Mode Enabled")
     else:
         print("No additional clients found")
