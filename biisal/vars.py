@@ -14,7 +14,7 @@ class Var():
 
         # Bot settings
         self.name = self.get_env('name', 'FileToLinkWalaBot')
-        self.SLEEP_THRESHOLD = self.get_env('SLEEP_THRESHOLD', 60)
+        self.SLEEP_THRESHOLD = self.get_env('SLEEP_THRESHOLD', 60)  # Default value is 60 seconds
         self.WORKERS = self.get_env('WORKERS', 4)
         self.BIN_CHANNEL = self.get_env('BIN_CHANNEL', 0)
         self.NEW_USER_LOG = self.get_env('NEW_USER_LOG', 0)
@@ -28,7 +28,7 @@ class Var():
         self.OWNER_USERNAME = self.get_env('OWNER_USERNAME', 'biisal')
 
         # Heroku settings
-        self.ON_HEROKU = 'DYNO' in os.environ
+        self.ON_HEROKU = 'DYNO' in os.environ  # Check if the code is running on Heroku
         self.FQDN = self.get_env('FQDN', self.BIND_ADRESS + ':' + str(self.PORT)) if not self.ON_HEROKU else self.APP_NAME + '.herokuapp.com'
 
         # SSL settings
