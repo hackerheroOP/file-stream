@@ -18,20 +18,10 @@ def humanbytes(size: float) -> str:
     # Raise a ValueError if the input is not a number
     if not isinstance(size, (int, float)):
         raise ValueError("Size must be a number")
-
+        
     # Return an empty string if the input is zero
     if not size:
         return ""
-
+    
     # Define constants for byte conversion
-    power = 1024  # The base for byte conversion (1024 bytes = 1 KiB)
-    n = 0  # The power of the base to use for conversion
-    power_names = {0: ' ', 1: 'Ki', 2: 'Mi', 3: 'Gi', 4: 'Ti'}  # The names of the units
-
-    # Convert the file size to the desired unit
-    while size > power:
-        size /= power
-        n += 1
-
-    # Return the converted file size as a formatted string
-    return f"{size:.2f} {power_names[n]}B"  # Use a f-string to format the output
+    power = 
