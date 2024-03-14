@@ -19,12 +19,17 @@ from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from biisal.utils.file_properties import get_name, get_hash, get_media_file_size
 
 # Initializing the database connection
+# The 'Var.DATABASE_URL' and 'Var.name' are imported from 'biisal.vars' module
 db = Database(Var.DATABASE_URL, Var.name)
 
 # Defining a dictionary for storing passwords and initializing a password database
 MY_PASS = os.environ.get("MY_PASS", None)
+# The 'os.environ.get("MY_PASS", None)' is used to get the environment variable 'MY_PASS'
+# If it is not set, 'None' is assigned to 'MY_PASS'
 pass_dict = {}
+# Initializing an empty dictionary for storing passwords
 pass_db = Database(Var.DATABASE_URL, "ag_passwords")
+# Initializing the password database connection
 
 # Defining a message text template
 msg_text = """<b>‣ ʏᴏᴜʀ ʟɪɴᴋ ɢᴇɴᴇʀᴀᴛᴇᴅ ! 😎
@@ -37,6 +42,8 @@ msg_text = """<b>‣ ʏᴏᴜʀ ʟɪɴᴋ ɢᴇɴᴇʀᴀᴛᴇᴅ ! 😎
 
 ‣ ɢᴇᴛ <a href="https://t.me/movies_desire_bot">ᴍᴏʀᴇ ғɪʟᴇs</a></b> 🤡""\"
 """
+# The 'msg_text' is a message template for sending a message to the user
+# It contains placeholders for file name, file size, and file links
 
 # Defining the event handler for private messages with media files
 @StreamBot.on_message(
@@ -60,28 +67,4 @@ async def private_receive_handler(c: Client, m: Message):
             if user.status == "kicked":
                 await c.send_message(
                     chat_id=m.chat.id,
-                    text="You are banned!\n\n  **Cᴏɴᴛᴀᴄᴛ Support [Support](https://t.me/pro_morningstar) They Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**}",
-                    disable_web_page_preview=True,
-                )
-                return
-        # If the user is not a member of the channel, send a message with a join button and return
-        except UserNotParticipant:
-            await c.send_photo(
-                chat_id=m.chat.id,
-                photo="https://telegra.ph/file/ad5d6fbbaf1ed157d8a8d.jpg",
-                caption="""<b>Hᴇʏ ᴛʜᴇʀᴇ!\n\nPʟᴇᴀsᴇ ᴊᴏɪɴ ᴏᴜʀ ᴜᴘᴅᴀᴛᴇs ᴄʜᴀɴɴᴇʟ ᴛᴏ ᴜsᴇ ᴍᴇ ! 😊\n\nDᴜᴇ ᴛᴏ sᴇʀᴠᴇʀ ᴏᴠᴇʀʟᴏᴀᴅ, ᴏɴʟʏ ᴏᴜʀ ᴄʜᴀɴɴᴇʟ sᴜʙsᴄʀɪʙᴇʀs ᴄᴀɴ ᴜsᴇ ᴛʜɪs ʙᴏᴛ !</b>""",
-                reply_markup=InlineKeyboardMarkup(
-                    [
-                        [
-                            InlineKeyboardButton("Jᴏɪɴ ɴᴏᴡ 🚩", url=f"https://t.me/{Var.UPDATES_CHANNEL}"]
-                        ]
-                    ]
-                ),
-            )
-            return
-        # If any other exception occurs, send the exception message and return
-        except Exception as e:
-            await m.reply_text(e)
-            await c.send_message(
-                chat_id=m.chat.id,
-               
+                    text="You are banned!\n\n  **C
