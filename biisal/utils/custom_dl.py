@@ -21,7 +21,9 @@ class ByteStreamer:
         self.clean_timer = 30 * 60  # Clean cache every 30 minutes.
         self.client = client
         self.cached_file_ids: Dict[int, FileId] = {}  # Cache for file IDs.
-        asyncio.create_task(self.clean_cache())  # Start cleaning the cache in the background.
+        
+        # Start cleaning the cache in the background.
+        asyncio.create_task(self.clean_cache())
 
     def __str__(self):
         """
@@ -52,9 +54,11 @@ class ByteStreamer:
         """
         file_id = await get_file_ids(self.client, id)  # Generate the file ID.
         logging.debug(f"Generated file ID and Unique ID for message with ID {id}")
+        
         if not file_id:
             logging.debug(f"Message with ID {id} not found")
             raise FIleNotFound  # Raise a custom exception if the message is not found.
+        
         self.cached_file_ids[id] = file_id  # Cache the file ID.
         logging.debug(f"Cached media message with ID {id}")
         return self.cached_file_ids[id]
@@ -126,5 +130,4 @@ class ByteStreamer:
         file_type = file_id.file_type
 
         if file_type == FileType.CHAT_PHOTO:
-            if file_id.chat_id > 0:
-               
+            if file_id.chat_
