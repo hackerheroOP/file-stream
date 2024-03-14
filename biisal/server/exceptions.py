@@ -5,14 +5,7 @@ class InvalidHash(Exception):
     """
     def __init__(self):
         """
-        Initializes the InvalidHash exception with an error message.
+        Initializes the InvalidHash exception with a default error message.
         """
         self.message = "Invalid hash"
-
-class FileNotFound(Exception):
-    """
-    This class represents an exception that is raised when a file is not found.
-    The message attribute stores the error message associated with the exception.
-    """
-    def __init__(self):
 
