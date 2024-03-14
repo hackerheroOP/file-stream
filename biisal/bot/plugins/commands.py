@@ -8,9 +8,10 @@ from pyrogram.errors import UserNotParticipant, FloodWait  # specific Pyrogram e
 # Initialize a logger for this module
 logger = logging.getLogger(__name__)
 
-async def some_function(...):
+async def some_function(arg1, arg2):
     """
-    This is a brief description of what this function does.
+    This function performs an asynchronous operation involving two arguments, arg1 and arg2.
+    It includes error handling for UserNotParticipant and FloodWait exceptions.
 
     :param arg1: Description of the first argument
     :param arg2: Description of the second argument
@@ -24,20 +25,23 @@ async def some_function(...):
         # Do something that might raise a UserNotParticipant exception
         await pyrogram_client.send_message(...)
     except UserNotParticipant:
-        logger.warning("User is not a participant in the chat")
+        logger.warning("A UserNotParticipant exception occurred, which means the user is not a participant in the chat.")
 
     # Handle FloodWait exception
     try:
         # Do something that might raise a FloodWait exception
         await pyrogram_client.send_message(...)
     except FloodWait as e:
-        logger.warning(f"FloodWait exception: {e.x} seconds")
+        logger.warning(f"A FloodWait exception occurred with a wait time of {e.x} seconds.")
 
 # Initialize a Pyrogram client
 pyrogram_client = pyrogram.Client(...)
 
 # Define a main function to run the script
 async def main():
+    """
+    The main function initializes and starts the Pyrogram client.
+    """
     # Do something with the Pyrogram client
     await pyrogram_client.start()
 
