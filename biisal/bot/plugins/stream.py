@@ -1,5 +1,5 @@
-# (c) Adarsh-Goel
-# (c) @biisal
+# Importing required modules
+# pylint: disable=import-error,no-name-in-module
 import os
 import asyncio
 from asyncio import TimeoutError
@@ -12,16 +12,21 @@ from pyrogram import filters, Client
 from pyrogram.errors import FloodWait, UserNotParticipant
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 
+# Local imports
 # from utils_bot import get_shortlink
 
+# Importing file properties utility functions
 from biisal.utils.file_properties import get_name, get_hash, get_media_file_size
 
+# Initializing the database connection
 db = Database(Var.DATABASE_URL, Var.name)
 
+# Defining a dictionary for storing passwords and initializing a password database
 MY_PASS = os.environ.get("MY_PASS", None)
 pass_dict = {}
 pass_db = Database(Var.DATABASE_URL, "ag_passwords")
 
+# Defining a message text template
 msg_text = """<b>‣ ʏᴏᴜʀ ʟɪɴᴋ ɢᴇɴᴇʀᴀᴛᴇᴅ ! 😎
 
 ‣ Fɪʟᴇ ɴᴀᴍᴇ : <i>{}</i>
@@ -33,19 +38,25 @@ msg_text = """<b>‣ ʏᴏᴜʀ ʟɪɴᴋ ɢᴇɴᴇʀᴀᴛᴇᴅ ! 😎
 ‣ ɢᴇᴛ <a href="https://t.me/movies_desire_bot">ᴍᴏʀᴇ ғɪʟᴇs</a></b> 🤡""\"
 """
 
+# Defining the event handler for private messages with media files
 @StreamBot.on_message(
     (filters.private) & (filters.document | filters.video | filters.audio | filters.photo), group=4
 )
 async def private_receive_handler(c: Client, m: Message):
+    # Check if the user exists in the database, if not, add the user
     if not await db.is_user_exist(m.from_user.id):
         await db.add_user(m.from_user.id)
+        # Send a message to the bin channel when a new user joins
         await c.send_message(
             Var.BIN_CHANNEL,
             f"New User Joined! : \n\n Name : [{m.from_user.first_name}](tg://user?id={m.from_user.id}) Started Your Bot!!",
         )
+
+    # Check if the updates channel is set and the user is a member of the channel
     if Var.UPDATES_CHANNEL != "None":
         try:
             user = await c.get_chat_member(Var.UPDATES_CHANNEL, m.chat.id)
+            # If the user is kicked from the channel, send a message and return
             if user.status == "kicked":
                 await c.send_message(
                     chat_id=m.chat.id,
@@ -53,6 +64,7 @@ async def private_receive_handler(c: Client, m: Message):
                     disable_web_page_preview=True,
                 )
                 return
+        # If the user is not a member of the channel, send a message with a join button and return
         except UserNotParticipant:
             await c.send_photo(
                 chat_id=m.chat.id,
@@ -67,21 +79,9 @@ async def private_receive_handler(c: Client, m: Message):
                 ),
             )
             return
+        # If any other exception occurs, send the exception message and return
         except Exception as e:
             await m.reply_text(e)
             await c.send_message(
                 chat_id=m.chat.id,
-                text="**Sᴏᴍᴇᴛʜɪɴɢ ᴡᴇɴᴛ Wʀᴏɴɢ. Cᴏɴᴛᴀᴄᴛ ᴍʏ Support** [Support](https://t.me/pro_morningstar_bot)",
-                disable_web_page_preview=True,
-            )
-            return
-    ban_chk = await db.is_banned(int(m.from_user.id))
-    if ban_chk == True:
-        return await m.reply(Var.BAN_ALERT)
-    try:
-        log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
-        stream_link = f"{Var.URL}watch/{str(log_msg.id)}/{quote_plus(get_name(log_msg))}?hash={get_hash(log_msg)}"
-        online_link = f"{Var.URL}{str(log_msg.id)}/{quote_plus(get_name(log_msg))}?hash={get_hash(log_msg)}"
-
-        await log_msg.reply_text(
-            text=f"**Rᴇǫᴜᴇꜱᴛᴇᴅ ʙʏ :** [{m.from_user.first_name}
+               
