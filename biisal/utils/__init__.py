@@ -2,11 +2,11 @@
 
 def calculate_rectangle_area(length, width):
     """
-    This function calculates the area of a rectangle.
+    This function calculates the area of a rectangle using the formula: area = length * width.
 
-    :param length: The length of the rectangle.
-    :param width: The width of the rectangle.
-    :return: The area of the rectangle.
+    :param length: The length of the rectangle. This parameter should be a positive number.
+    :param width: The width of the rectangle. This parameter should also be a positive number.
+    :return: The area of the rectangle as a float. If either the length or width is not positive, the function will return None.
     """
     if length <= 0 or width <= 0:
         return None
